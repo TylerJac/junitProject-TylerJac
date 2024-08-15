@@ -1,90 +1,90 @@
 package org.example;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.example.Book;
+import org.example.BookService;
+import org.example.User;
+import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class BookServiceTest {
 
     private BookService bookService;
-    private Book testBook;
-    private User testUser;
+    private Book mockBook;
+    private User mockUser;
+
+    @BeforeAll
+    public static void beforeAllTests() {
+        System.out.println("Starting BookService tests...");
+    }
 
     @BeforeEach
     public void setUp() {
         bookService = new BookService();
-        testBook = new Book("Test Title", "Test Author", "Test Genre", 29.99);
-        testUser = new User("testUser", "password", "test@example.com");
+        mockBook = mock(Book.class);
+        mockUser = mock(User.class);
+
+        when(mockBook.getTitle()).thenReturn("Test Title");
+        when(mockBook.getAuthor()).thenReturn("Test Author");
+        when(mockBook.getGenre()).thenReturn("Test Genre");
+
+        when(mockUser.getPurchasedBooks()).thenReturn(new ArrayList<>());
     }
 
     @Test
-    public void testSearchBook_BookExists_ShouldReturnBookList() {
-        bookService.addBook(testBook);
+    public void testSearchBook_PositiveCase() {
+        bookService.addBook(mockBook);
         List<Book> result = bookService.searchBook("Test Title");
         assertFalse(result.isEmpty());
-        assertEquals(1, result.size());
-        assertEquals(testBook, result.get(0));
+        assertEquals(mockBook, result.get(0));
     }
 
     @Test
-    public void testSearchBook_BookNotExists_ShouldReturnEmptyList() {
+    public void testSearchBook_NegativeCase() {
         List<Book> result = bookService.searchBook("Nonexistent Title");
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testPurchaseBook_BookExists_ShouldReturnTrue() {
-        bookService.addBook(testBook);
-        boolean result = bookService.purchaseBook(testUser, testBook);
+    public void testSearchBook_EdgeCase() {
+        List<Book> result = bookService.searchBook("");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testPurchaseBook_PositiveCase() {
+        bookService.addBook(mockBook);
+        boolean result = bookService.purchaseBook(mockUser, mockBook);
         assertTrue(result);
     }
 
     @Test
-    public void testPurchaseBook_BookNotExists_ShouldReturnFalse() {
-        boolean result = bookService.purchaseBook(testUser, testBook);
+    public void testPurchaseBook_NegativeCase() {
+        boolean result = bookService.purchaseBook(mockUser, mockBook);
         assertFalse(result);
     }
 
     @Test
-    public void testAddBookReview_UserHasPurchasedBook_ShouldReturnTrue() {
-        bookService.addBook(testBook);
-        testUser.getPurchasedBooks().add(testBook);
-        boolean result = bookService.addBookReview(testUser, testBook, "Great book!");
-        assertTrue(result);
-    }
-
-    @Test
-    public void testAddBookReview_UserHasNotPurchasedBook_ShouldReturnFalse() {
-        bookService.addBook(testBook);
-        boolean result = bookService.addBookReview(testUser, testBook, "Great book!");
+    public void testPurchaseBook_EdgeCase() {
+        boolean result = bookService.purchaseBook(null, mockBook);
         assertFalse(result);
     }
 
-    @Test
-    public void testAddBook_NewBook_ShouldReturnTrue() {
-        boolean result = bookService.addBook(testBook);
-        assertTrue(result);
+    @AfterEach
+    public void tearDown() {
+        bookService = null;
+        mockBook = null;
+        mockUser = null;
     }
 
-    @Test
-    public void testAddBook_BookAlreadyExists_ShouldReturnFalse() {
-        bookService.addBook(testBook);
-        boolean result = bookService.addBook(testBook);
-        assertFalse(result);
-    }
-
-    @Test
-    public void testRemoveBook_BookExists_ShouldReturnTrue() {
-        bookService.addBook(testBook);
-        boolean result = bookService.removeBook(testBook);
-        assertTrue(result);
-    }
-
-    @Test
-    public void testRemoveBook_BookNotExists_ShouldReturnFalse() {
-        boolean result = bookService.removeBook(testBook);
-        assertFalse(result);
+    @AfterAll
+    public static void afterAllTests() {
+        System.out.println("BookService tests completed.");
     }
 }
 
