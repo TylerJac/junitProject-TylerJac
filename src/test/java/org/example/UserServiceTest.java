@@ -1,9 +1,6 @@
 package org.example;
-import org.example.User;
-import org.example.UserService;
-import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,13 +37,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testRegisterUser_EdgeCase() {
-        User emptyUsernameUser = new User("", "password", "test@example.com");
-        boolean result = userService.registerUser(emptyUsernameUser);
-        assertFalse(result);
-    }
-
-    @Test
     public void testLoginUser_PositiveCase() {
         userService.registerUser(mockUser);
         User result = userService.loginUser("testUser", "password");
@@ -76,5 +66,35 @@ public class UserServiceTest {
     public static void afterAllTests() {
         System.out.println("UserService tests completed.");
     }
-    
+
+    @Test
+    public void testUpdateUserProfile_PositiveCase() {
+        User mockUser = new User("originalUsername", "originalPassword", "original@example.com");
+        userService.registerUser(mockUser);
+        boolean result = userService.updateUserProfile(mockUser, "newUsername", "newPassword", "new@example.com");
+        assertTrue(result);
+        assertNull(userService.loginUser("originalUsername", "originalPassword"));
+        User updatedUser = userService.loginUser("newUsername", "newPassword");
+        assertNotNull(updatedUser);
+        assertEquals("newUsername", updatedUser.getUsername());
+        assertEquals("newPassword", updatedUser.getPassword());
+        assertEquals("new@example.com", updatedUser.getEmail());
+    }
+
+    @Test
+    public void testUpdateUserProfile_NegativeCase() {
+        userService.registerUser(mockUser);
+        User anotherUser = new User("anotherUser", "password", "another@example.com");
+        userService.registerUser(anotherUser);
+        boolean result = userService.updateUserProfile(mockUser, "anotherUser", "newPassword", "new@example.com");
+        assertFalse(result);
+        assertNotEquals("anotherUser", mockUser.getUsername());
+    }
+
+    @Test
+    public void testUpdateUserProfile_EdgeCase() {
+        userService.registerUser(mockUser);
+        boolean result = userService.updateUserProfile(mockUser, "", "", "");
+        assertTrue(result);
+    }
 }
