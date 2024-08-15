@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7a090f3e-e4a1-4a59-89a2-77f6a31ff456" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/BookServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/org/example/UserServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="7a090f3e-e4a1-4a59-89a2-77f6a31ff456" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,7 +165,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1723745088604</updated>
-      <workItem from="1723745089805" duration="1988000" />
+      <workItem from="1723745089805" duration="2804000" />
     </task>
     <servers />
   </component>
